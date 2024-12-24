@@ -1,0 +1,322 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Dark Mode Variables */
+:root {
+    --bg-color: #f0f2f5;
+    --bg-secondary: #ffffff;
+    --text-color: #1c1e21;
+    --text-secondary: #65676b;
+    --border-color: #dddfe2;
+    --primary-color: #1877f2;
+    --primary-hover: #166fe5;
+    --shadow-color: rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] {
+    --bg-color: #18191a;
+    --bg-secondary: #242526;
+    --text-color: #e4e6eb;
+    --text-secondary: #b0b3b8;
+    --border-color: #3e4042;
+    --primary-color: #2d88ff;
+    --primary-hover: #1877f2;
+    --shadow-color: rgba(0,0,0,0.3);
+}
+
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Header Styling Update */
+.header {
+    background: var(--bg-secondary);
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.username {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+/* Navigation */
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #1c1e21;
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+.nav a:hover {
+    background: #f0f2f5;
+}
+
+/* Forms */
+form {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    max-width: 500px;
+    margin: 20px auto;
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    background: var(--bg-secondary);
+    color: var(--text-color);
+}
+
+button {
+    background: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+button:hover {
+    background: var(--primary-hover);
+}
+
+/* Posts */
+.posts {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.post {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    margin-bottom: 20px;
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.post h3 {
+    color: #1c1e21;
+    margin-bottom: 10px;
+}
+
+.post p {
+    color: #1c1e21;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.post small {
+    color: #65676b;
+}
+
+/* Error messages */
+.error {
+    background: #ffebe8;
+    border: 1px solid #dd3c10;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    color: #dd3c10;
+}
+
+/* Sidebar Styling */
+.container {
+    display: flex;
+    min-height: 100vh;
+    margin-top: 60px;
+}
+
+.sidebar {
+    width: 240px;
+    background: var(--bg-secondary);
+    padding: 20px;
+    position: fixed;
+    height: calc(100vh - 60px);
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    top: 60px;
+}
+
+.sidebar-menu {
+    margin-top: 20px;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+    background: var(--primary-color);
+    color: white !important;
+}
+
+.sidebar-menu a:hover i,
+.sidebar-menu a:hover span {
+    color: white !important;
+}
+
+.sidebar-menu i {
+    margin-right: 10px;
+    font-size: 20px;
+    width: 24px;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu span {
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+/* Main Content Adjustment */
+.main-content {
+    flex: 1;
+    margin-left: 240px;
+    padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+    .sidebar span {
+        display: none;
+    }
+    .main-content {
+        margin-left: 70px;
+    }
+}
+
+/* Toggle Button Styling */
+.toggle-sidebar {
+    position: static;
+    top: auto;
+    left: auto;
+    background: #1877f2;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto;
+}
+
+/* Sidebar Hidden State */
+.sidebar-hidden .sidebar {
+    transform: translateX(-240px);
+}
+
+.sidebar-hidden .main-content {
+    margin-left: 0;
+}
+
+/* Sidebar Transition */
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.main-content {
+    transition: margin-left 0.3s ease;
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.dark-mode-toggle:hover {
+    background: var(--bg-color);
+}
+
+/* Text Colors for Dark Mode */
+[data-theme="dark"] {
+    --bg-color: #18191a;
+    --bg-secondary: #242526;
+    --text-color: #e4e6eb;
+    --text-secondary: #b0b3b8;
+    --border-color: #3e4042;
+    --primary-color: #2d88ff;
+    --primary-hover: #1877f2;
+    --shadow-color: rgba(0,0,0,0.3);
+}
+
+/* Ensure all text elements use the variable colors */
+p, h1, h2, h3, h4, h5, h6, span, input, textarea {
+    color: var(--text-color);
+}
+
+.post p, .post h3, .user-card h3, .user-details p {
+    color: var(--text-color);
+}
+
+/* Form elements in dark mode */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+    color: var(--text-color);
+    background: var(--bg-secondary);
+}
+
+/* Links in dark mode */
+[data-theme="dark"] a {
+    color: var(--primary-color);
+} 

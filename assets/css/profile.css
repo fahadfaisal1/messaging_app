@@ -1,0 +1,217 @@
+/* Profile Container */
+.profile-container {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Cover Photo */
+.cover-photo {
+    position: relative;
+    height: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 80px;
+}
+
+.cover-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-cover {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Profile Info */
+.profile-info {
+    position: relative;
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    position: absolute;
+    top: -100px;
+    left: 20px;
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    border: 4px solid var(--bg-secondary);
+    overflow: hidden;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-profile-pic {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: var(--bg-secondary);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.profile-details {
+    margin-left: 190px;
+}
+
+.profile-details h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.bio {
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat {
+    color: var(--text-secondary);
+}
+
+.stat i {
+    margin-right: 5px;
+}
+
+.edit-profile-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Profile Navigation */
+.profile-nav {
+    display: flex;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    background: var(--bg-secondary);
+}
+
+.profile-nav a {
+    padding: 15px 30px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+}
+
+.profile-nav a.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* Posts Section */
+.create-post {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+.create-post textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    resize: none;
+    background: var(--bg-secondary);
+    color: var(--text-color);
+}
+
+.post-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.post-action {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Posts Display */
+.post {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.post-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.post-header h3 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.post-header small {
+    color: var(--text-secondary);
+}
+
+.post-content {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.post-actions button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.post-actions button:hover {
+    background: var(--bg-color);
+    border-radius: 4px;
+} 
