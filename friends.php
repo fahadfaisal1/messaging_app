@@ -151,18 +151,18 @@ $result = mysqli_query($con, $sql);
                         <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" class="profile-pic" onerror="this.src='assets/images/default-avatar.jpg'">
                         <h3><?php echo htmlspecialchars($user['username']); ?></h3>
                         <div class="action-buttons">
-                            <?php if (empty($user['request_status'])) { ?>
+                            <?php if (empty($user['request_status'])): ?>
                                 <button class="btn btn-primary" onclick="sendFriendRequest(<?php echo $user['id']; ?>, this)">
                                     <i class="fas fa-user-plus"></i>
                                     Add Friend
                                 </button>
-                            <?php } elseif ($user['request_status'] == 'pending') {
-                                if ($user['request_type'] == 'sent') { ?>
-                                    <button class="btn btn-secondary" disabled>
-                                        <i class="fas fa-clock"></i>
-                                        Request Sent
+                            <?php elseif ($user['request_status'] == 'pending'): ?>
+                                <?php if ($user['request_type'] == 'sent'): ?>
+                                    <button class="btn btn-secondary" onclick="cancelFriendRequest(<?php echo $user['id']; ?>, this)">
+                                        <i class="fas fa-times"></i>
+                                        Cancel Request
                                     </button>
-                                <?php } else { ?>
+                                <?php else: ?>
                                     <button class="btn btn-primary" onclick="handleFriendRequest(<?php echo $user['id']; ?>, 'accept', this)">
                                         <i class="fas fa-check"></i>
                                         Accept
@@ -171,8 +171,8 @@ $result = mysqli_query($con, $sql);
                                         <i class="fas fa-times"></i>
                                         Reject
                                     </button>
-                                <?php }
-                            } ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
                             <a href="chat/messages.php?user=<?php echo $user['id']; ?>" class="btn btn-secondary">
                                 <i class="fas fa-comment"></i>
                                 Message
@@ -252,9 +252,9 @@ $result = mysqli_query($con, $sql);
                             } else if (user.request_status == 'pending') {
                                 if (user.request_type == 'sent') {
                                     buttonHtml = `
-                                        <button class="btn btn-secondary" disabled>
-                                            <i class="fas fa-clock"></i>
-                                            Request Sent
+                                        <button class="btn btn-secondary" onclick="cancelFriendRequest(${user.id}, this)">
+                                            <i class="fas fa-times"></i>
+                                            Cancel Request
                                         </button>
                                     `;
                                 } else {
@@ -303,9 +303,17 @@ $result = mysqli_query($con, $sql);
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    button.innerHTML = '<i class="fas fa-clock"></i> Request Sent';
-                    button.disabled = true;
-                    button.classList.replace('btn-primary', 'btn-secondary');
+                    const actionButtons = button.parentElement;
+                    actionButtons.innerHTML = `
+                        <button class="btn btn-secondary" onclick="cancelFriendRequest(${userId}, this)">
+                            <i class="fas fa-times"></i>
+                            Cancel Request
+                        </button>
+                        <a href="chat/messages.php?user=${userId}" class="btn btn-secondary">
+                            <i class="fas fa-comment"></i>
+                            Message
+                        </a>
+                    `;
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -328,6 +336,33 @@ $result = mysqli_query($con, $sql);
                         <button class="btn btn-secondary" disabled>
                             <i class="fas fa-user-check"></i>
                             Friends
+                        </button>
+                        <a href="chat/messages.php?user=${userId}" class="btn btn-secondary">
+                            <i class="fas fa-comment"></i>
+                            Message
+                        </a>
+                    `;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function cancelFriendRequest(userId, button) {
+            fetch('handle_friend_request.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=cancel&user_id=${userId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const actionButtons = button.parentElement;
+                    actionButtons.innerHTML = `
+                        <button class="btn btn-primary" onclick="sendFriendRequest(${userId}, this)">
+                            <i class="fas fa-user-plus"></i>
+                            Add Friend
                         </button>
                         <a href="chat/messages.php?user=${userId}" class="btn btn-secondary">
                             <i class="fas fa-comment"></i>

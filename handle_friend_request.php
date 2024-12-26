@@ -17,6 +17,13 @@ switch($action) {
         $sql = "INSERT INTO friend_requests (sender_id, receiver_id) VALUES ($sender_id, $receiver_id)";
         break;
         
+    case 'cancel':
+        $sql = "DELETE FROM friend_requests 
+                WHERE sender_id = $sender_id 
+                AND receiver_id = $receiver_id 
+                AND status = 'pending'";
+        break;
+        
     case 'accept':
         $sql = "UPDATE friend_requests 
                 SET status = 'accepted' 
