@@ -79,7 +79,7 @@ $result = mysqli_query($con, $sql);
                                 <img src="uploads/posts/<?php echo $post['image']; ?>" alt="Post Image">
                             </div>
                         <?php endif; ?>
-                        <div class="post-actions">
+                        <div class="post-actions flex">
                             <button><i class="far fa-thumbs-up"></i> Like</button>
                             <button><i class="far fa-comment"></i> Comment</button>
                             <button><i class="far fa-share-square"></i> Share</button>
