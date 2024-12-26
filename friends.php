@@ -341,18 +341,32 @@ $result = mysqli_query($con, $sql);
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Remove the request buttons and show "Friends" status
                     const actionButtons = button.parentElement;
-                    actionButtons.innerHTML = `
-                        <button class="btn btn-secondary" disabled>
-                            <i class="fas fa-user-check"></i>
-                            Friends
-                        </button>
-                        <a href="chat/messages.php?user=${userId}" class="btn btn-secondary">
-                            <i class="fas fa-comment"></i>
-                            Message
-                        </a>
-                    `;
+                    if (action === 'reject') {
+                        // After reject, show Add Friend button
+                        actionButtons.innerHTML = `
+                            <button class="btn btn-primary" onclick="sendFriendRequest(${userId}, this)">
+                                <i class="fas fa-user-plus"></i>
+                                Add Friend
+                            </button>
+                            <a href="chat/messages.php?user=${userId}" class="btn btn-secondary">
+                                <i class="fas fa-comment"></i>
+                                Message
+                            </a>
+                        `;
+                    } else if (action === 'accept') {
+                        // After accept, show Friends status
+                        actionButtons.innerHTML = `
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-user-check"></i>
+                                Friends
+                            </button>
+                            <a href="chat/messages.php?user=${userId}" class="btn btn-secondary">
+                                <i class="fas fa-comment"></i>
+                                Message
+                            </a>
+                        `;
+                    }
                 }
             })
             .catch(error => console.error('Error:', error));
