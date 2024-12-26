@@ -372,32 +372,69 @@ p, h1, h2, h3, h4, h5, h6, span, input, textarea {
     display: flex;
     gap: 10px;
     align-items: center;
+    margin-top: 10px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
 }
 
 .post-action {
-    padding: 8px 16px;
-    background: var(--bg-color);
+    padding: 6px 12px;
+    background: transparent;
     border: none;
-    border-radius: 6px;
     color: var(--text-color);
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 5px;
+    font-size: 14px;
+    flex: 1;
+    justify-content: center;
 }
 
 .post-action:hover {
-    background: var(--border-color);
+    background: var(--bg-color);
+    border-radius: 4px;
 }
 
 .like-button {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
     cursor: pointer;
+    padding: 6px 12px;
+    font-size: 14px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 
-.like-button.liked {
-    color: #1877f2;
+.like-button:hover {
+    background: var(--bg-color);
+    border-radius: 4px;
 }
 
-.like-button.liked i {
-    color: #1877f2;
+.post .post-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.post .post-actions button {
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    flex: 1;
+    color: var(--text-color);
+}
+
+.post .post-actions button i {
+    margin-right: 5px;
+}
+
+.post .post-actions button:hover {
+    background: transparent;
 } 
