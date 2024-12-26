@@ -569,4 +569,65 @@ p, h1, h2, h3, h4, h5, h6, span, input, textarea {
     font-size: 16px;
     background: var(--bg-secondary);
     color: var(--text-color);
+}
+
+/* Notifications Styling */
+.notifications-container {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.notification-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px var(--shadow-color);
+}
+
+.notification-card.unread {
+    background: var(--bg-color);
+    border-left: 4px solid var(--primary-color);
+}
+
+.notification-card .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content p {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.notification-content small {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+/* Dark mode styles for notifications */
+[data-theme="dark"] .notification-card {
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .notification-card.unread {
+    background: var(--bg-color);
+    border-left: 4px solid var(--primary-color);
+}
+
+[data-theme="dark"] .notification-content p {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .notification-content small {
+    color: var(--text-secondary);
 } 

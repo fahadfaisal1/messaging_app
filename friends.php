@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Get users with friend request status
-$sql = "SELECT 
+$sql = "SELECT DISTINCT
         users.id, users.username, users.profile_pic,
         fr.status as request_status,
         CASE 
@@ -19,7 +19,8 @@ $sql = "SELECT
         LEFT JOIN friend_requests fr ON 
             (fr.sender_id = {$_SESSION['user_id']} AND fr.receiver_id = users.id) OR
             (fr.receiver_id = {$_SESSION['user_id']} AND fr.sender_id = users.id)
-        WHERE users.id != {$_SESSION['user_id']}";
+        WHERE users.id != {$_SESSION['user_id']}
+        GROUP BY users.id";
 
 $result = mysqli_query($con, $sql);
 ?>
@@ -293,6 +294,9 @@ $result = mysqli_query($con, $sql);
         });
 
         function sendFriendRequest(userId, button) {
+            // Disable the button to prevent multiple clicks
+            button.disabled = true;
+            
             fetch('handle_friend_request.php', {
                 method: 'POST',
                 headers: {
@@ -314,9 +318,16 @@ $result = mysqli_query($con, $sql);
                             Message
                         </a>
                     `;
+                } else {
+                    // Re-enable the button if there was an error
+                    button.disabled = false;
+                    alert(data.message || 'Error sending friend request');
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                button.disabled = false;
+            });
         }
 
         function handleFriendRequest(userId, action, button) {
@@ -348,6 +359,9 @@ $result = mysqli_query($con, $sql);
         }
 
         function cancelFriendRequest(userId, button) {
+            // Disable the button to prevent multiple clicks
+            button.disabled = true;
+            
             fetch('handle_friend_request.php', {
                 method: 'POST',
                 headers: {
@@ -369,9 +383,16 @@ $result = mysqli_query($con, $sql);
                             Message
                         </a>
                     `;
+                } else {
+                    // Re-enable the button if there was an error
+                    button.disabled = false;
+                    alert(data.message || 'Error canceling friend request');
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                button.disabled = false;
+            });
         }
     </script>
 </body>

@@ -2,6 +2,10 @@
 // Get current page directory depth
 $isInSubfolder = strpos($_SERVER['PHP_SELF'], '/chat/') !== false;
 $baseUrl = $isInSubfolder ? '../' : '';
+
+$notif_sql = "SELECT COUNT(*) as count FROM notifications WHERE user_id = {$_SESSION['user_id']} AND is_read = 0";
+$notif_result = mysqli_query($con, $notif_sql);
+$unread_count = mysqli_fetch_assoc($notif_result)['count'];
 ?>
 
 <div class="sidebar">
@@ -25,6 +29,9 @@ $baseUrl = $isInSubfolder ? '../' : '';
         <a href="<?php echo $baseUrl; ?>notifications.php">
             <i class="fas fa-bell"></i>
             <span>Notifications</span>
+            <?php if($unread_count > 0): ?>
+                <span class="notification-badge"><?php echo $unread_count; ?></span>
+            <?php endif; ?>
         </a>
         <a href="<?php echo $baseUrl; ?>settings.php">
             <i class="fas fa-cog"></i>
