@@ -18,14 +18,18 @@
 .user-item {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
+    padding: 10px;
+    gap: 10px;
     text-decoration: none;
     color: var(--text-color);
-    transition: background 0.3s;
 }
 
-.user-item:hover, .user-item.active {
-    background: var(--bg-color);
+.user-item:hover {
+    background: var(--bg-hover);
+}
+
+.user-item.active {
+    background: var(--bg-active);
 }
 
 .user-avatar {
@@ -33,7 +37,6 @@
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
-    margin-right: 10px;
 }
 
 .user-avatar img {

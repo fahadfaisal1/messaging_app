@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Get all users except current user
-$sql = "SELECT id, username FROM users WHERE id != {$_SESSION['user_id']}";
+$sql = "SELECT id, username, profile_pic FROM users WHERE id != {$_SESSION['user_id']}";
 $users = mysqli_query($con, $sql);
 
 // Get selected user's chat
@@ -58,7 +58,12 @@ if($selected_user) {
                         <a href="?user=<?php echo $user['id']; ?>" 
                            class="user-item <?php echo ($selected_user == $user['id']) ? 'active' : ''; ?>">
                             <div class="user-avatar">
-                                <i class="fas fa-user"></i>
+                                <?php 
+                                $profile_pic = !empty($user['profile_pic']) 
+                                    ? '../uploads/profile/' . htmlspecialchars($user['profile_pic'])
+                                    : '../assets/images/default-avatar.jpg';
+                                ?>
+                                <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" onerror="this.src='../assets/images/default-avatar.jpg'">
                             </div>
                             <div class="user-info">
                                 <span class="user-name"><?php echo $user['username']; ?></span>
