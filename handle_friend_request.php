@@ -27,13 +27,6 @@ switch($action) {
 
         $sql = "INSERT INTO friend_requests (sender_id, receiver_id) VALUES ($sender_id, $receiver_id)";
         if(mysqli_query($con, $sql)) {
-            // Delete any existing notifications for this request
-            mysqli_query($con, "DELETE FROM notifications 
-                              WHERE user_id = $receiver_id 
-                              AND from_user_id = $sender_id 
-                              AND type = 'friend_request'");
-
-            // Create new notification
             $notification_sql = "INSERT INTO notifications (user_id, type, from_user_id, content) 
                                VALUES ($receiver_id, 'friend_request', $sender_id, 
                                (SELECT CONCAT(username, ' sent you a friend request') 
@@ -46,18 +39,28 @@ switch($action) {
         break;
         
     case 'cancel':
-        // Delete the friend request
         $sql = "DELETE FROM friend_requests 
                 WHERE sender_id = $sender_id 
-                AND receiver_id = $receiver_id";
+                AND receiver_id = $receiver_id 
+                AND status = 'pending'";
         
         if(mysqli_query($con, $sql)) {
-            // Delete the notification
-            mysqli_query($con, "DELETE FROM notifications 
-                              WHERE user_id = $receiver_id 
-                              AND from_user_id = $sender_id 
-                              AND type = 'friend_request'");
-            echo json_encode(['success' => true]);
+            if(mysqli_affected_rows($con) > 0) {
+                $notification_sql = "INSERT INTO notifications (user_id, type, from_user_id, content) 
+                                   VALUES ($receiver_id, 'friend_request_canceled', $sender_id, 
+                                   (SELECT CONCAT(username, ' canceled their friend request') 
+                                    FROM users WHERE id = $sender_id))";
+                mysqli_query($con, $notification_sql);
+                
+                mysqli_query($con, "DELETE FROM notifications 
+                                  WHERE user_id = $receiver_id 
+                                  AND from_user_id = $sender_id 
+                                  AND type = 'friend_request'");
+                                  
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'No request found to cancel']);
+            }
         } else {
             echo json_encode(['success' => false, 'message' => mysqli_error($con)]);
         }
@@ -70,20 +73,39 @@ switch($action) {
                 AND sender_id = $receiver_id 
                 AND status = 'pending'";
         if(mysqli_query($con, $sql)) {
-            echo json_encode(['success' => true]);
+            if(mysqli_affected_rows($con) > 0) {
+                // Add notification for accepted request
+                $notification_sql = "INSERT INTO notifications (user_id, type, from_user_id, content) 
+                                   VALUES ($receiver_id, 'friend_request_accepted', $sender_id, 
+                                   (SELECT CONCAT(username, ' accepted your friend request') 
+                                    FROM users WHERE id = $sender_id))";
+                mysqli_query($con, $notification_sql);
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'No request found to accept']);
+            }
         } else {
             echo json_encode(['success' => false, 'message' => mysqli_error($con)]);
         }
         break;
         
     case 'reject':
-        $sql = "UPDATE friend_requests 
-                SET status = 'rejected' 
+        $sql = "DELETE FROM friend_requests 
                 WHERE receiver_id = $sender_id 
                 AND sender_id = $receiver_id 
                 AND status = 'pending'";
         if(mysqli_query($con, $sql)) {
-            echo json_encode(['success' => true]);
+            if(mysqli_affected_rows($con) > 0) {
+                // Add notification for rejected request
+                $notification_sql = "INSERT INTO notifications (user_id, type, from_user_id, content) 
+                                   VALUES ($receiver_id, 'friend_request_rejected', $sender_id, 
+                                   (SELECT CONCAT(username, ' rejected your friend request') 
+                                    FROM users WHERE id = $sender_id))";
+                mysqli_query($con, $notification_sql);
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'No request found to reject']);
+            }
         } else {
             echo json_encode(['success' => false, 'message' => mysqli_error($con)]);
         }
