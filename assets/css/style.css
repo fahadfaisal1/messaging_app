@@ -390,27 +390,14 @@ p, h1, h2, h3, h4, h5, h6, span, input, textarea {
     background: var(--border-color);
 }
 
-/* Like Button Styling */
 .like-button {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 16px;
-    border: none;
-    background: none;
-    color: var(--text-secondary);
     cursor: pointer;
-    transition: color 0.2s;
-}
-
-.like-button:hover {
-    color: var(--primary-color);
 }
 
 .like-button.liked {
-    color: var(--primary-color);
+    color: #1877f2;
 }
 
-.likes-count {
-    font-weight: 500;
+.like-button.liked i {
+    color: #1877f2;
 } 

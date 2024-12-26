@@ -7,7 +7,9 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$sql = "SELECT posts.*, users.username 
+$sql = "SELECT posts.*, users.username, 
+        (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) as likes_count,
+        (SELECT COUNT(*) > 0 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = {$_SESSION['user_id']}) as user_liked
         FROM posts 
         JOIN users ON posts.user_id = users.id 
         ORDER BY posts.created_at DESC";
@@ -80,7 +82,11 @@ $result = mysqli_query($con, $sql);
                             </div>
                         <?php endif; ?>
                         <div class="post-actions flex">
-                            <button><i class="far fa-thumbs-up"></i> Like</button>
+                            <button class="like-button <?php echo $post['user_liked'] ? 'liked' : ''; ?>" 
+                                    onclick="handleLike(<?php echo $post['id']; ?>, this)">
+                                <i class="<?php echo $post['user_liked'] ? 'fas' : 'far'; ?> fa-thumbs-up"></i> 
+                                Like <span class="like-count"><?php echo $post['likes_count']; ?></span>
+                            </button>
                             <button><i class="far fa-comment"></i> Comment</button>
                             <button><i class="far fa-share-square"></i> Share</button>
                         </div>
@@ -135,6 +141,36 @@ $result = mysqli_query($con, $sql);
                 icon.classList.add('fa-sun');
             }
         });
+
+        function handleLike(postId, button) {
+            fetch('like_post.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `post_id=${postId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const likeCount = button.querySelector('.like-count');
+                    const icon = button.querySelector('i');
+                    
+                    likeCount.textContent = data.likes;
+                    
+                    if (data.action === 'liked') {
+                        button.classList.add('liked');
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                    } else {
+                        button.classList.remove('liked');
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
     </script>
 </body>
 </html>
