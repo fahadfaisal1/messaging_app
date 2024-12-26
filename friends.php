@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Get all users except current user
 $sql = "SELECT id, username, email FROM users WHERE id != {$_SESSION['user_id']}";
+
 $result = mysqli_query($con, $sql);
 ?>
 

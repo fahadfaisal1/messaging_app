@@ -76,6 +76,7 @@ if($selected_user) {
                                         <div class="message-content">
                                             <?php echo htmlspecialchars($message['message']); ?>
                                         </div>
+                                        
                                         <div class="message-time">
                                             <?php echo date('H:i', strtotime($message['sent_at'])); ?>
                                         </div>

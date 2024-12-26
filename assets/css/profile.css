@@ -214,4 +214,13 @@
 .post-actions button:hover {
     background: var(--bg-color);
     border-radius: 4px;
+}
+
+/* No Posts Message */
+.no-posts {
+    text-align: center;
+    padding: 40px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    color: var(--text-secondary);
 } 

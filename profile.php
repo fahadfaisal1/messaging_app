@@ -18,8 +18,8 @@ $posts_sql = "SELECT posts.*, users.username
               FROM posts 
               JOIN users ON posts.user_id = users.id 
               WHERE posts.user_id = $user_id 
-              ORDER BY created_at DESC";
-$posts_result = mysqli_query($con, $sql);
+              ORDER BY posts.created_at DESC";
+$posts_result = mysqli_query($con, $posts_sql);
 ?>
 
 <!DOCTYPE html>
@@ -62,10 +62,14 @@ $posts_result = mysqli_query($con, $sql);
                 <!-- Profile Info Section -->
                 <div class="profile-info">
                     <div class="profile-picture">
-                        <img src="assets/images/default-avatar.jpg" alt="Profile Picture">
-                        <button class="edit-profile-pic">
+                        <?php 
+                        $profile_pic = !empty($user['profile_pic']) ? 'uploads/profile/' . $user['profile_pic'] : 'assets/images/default-avatar.jpg';
+                        ?>
+                        <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" id="profileImage">
+                        <button class="edit-profile-pic" onclick="document.getElementById('profilePicInput').click();">
                             <i class="fas fa-camera"></i>
                         </button>
+                        <input type="file" id="profilePicInput" style="display: none;" accept="image/*" onchange="uploadProfilePic(this)">
                     </div>
                     <div class="profile-details">
                         <h2><?php echo htmlspecialchars($user['username']); ?></h2>
@@ -113,29 +117,35 @@ $posts_result = mysqli_query($con, $sql);
 
                     <!-- Posts Display -->
                     <div class="posts">
-                        <?php while($post = mysqli_fetch_assoc($posts_result)) { ?>
-                            <div class="post">
-                                <div class="post-header">
-                                    <img src="assets/images/default-avatar.jpg" alt="Profile Picture">
-                                    <div>
-                                        <h3><?php echo $post['username']; ?></h3>
-                                        <small><?php echo date('F j, Y g:i a', strtotime($post['created_at'])); ?></small>
+                        <?php if(mysqli_num_rows($posts_result) > 0): ?>
+                            <?php while($post = mysqli_fetch_assoc($posts_result)) { ?>
+                                <div class="post">
+                                    <div class="post-header">
+                                        <img src="assets/images/default-avatar.jpg" alt="Profile Picture">
+                                        <div>
+                                            <h3><?php echo htmlspecialchars($post['username']); ?></h3>
+                                            <small><?php echo date('F j, Y g:i a', strtotime($post['created_at'])); ?></small>
+                                        </div>
+                                    </div>
+                                    <p class="post-content"><?php echo htmlspecialchars($post['content']); ?></p>
+                                    <div class="post-actions">
+                                        <button>
+                                            <i class="far fa-thumbs-up"></i> Like
+                                        </button>
+                                        <button>
+                                            <i class="far fa-comment"></i> Comment
+                                        </button>
+                                        <button>
+                                            <i class="far fa-share-square"></i> Share
+                                        </button>
                                     </div>
                                 </div>
-                                <p class="post-content"><?php echo htmlspecialchars($post['content']); ?></p>
-                                <div class="post-actions">
-                                    <button>
-                                        <i class="far fa-thumbs-up"></i> Like
-                                    </button>
-                                    <button>
-                                        <i class="far fa-comment"></i> Comment
-                                    </button>
-                                    <button>
-                                        <i class="far fa-share-square"></i> Share
-                                    </button>
-                                </div>
+                            <?php } ?>
+                        <?php else: ?>
+                            <div class="no-posts">
+                                <p>No posts yet. Create your first post!</p>
                             </div>
-                        <?php } ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -183,6 +193,36 @@ $posts_result = mysqli_query($con, $sql);
                 icon.classList.add('fa-sun');
             }
         });
+
+        // Profile picture upload
+        function uploadProfilePic(input) {
+            if (input.files && input.files[0]) {
+                const formData = new FormData();
+                formData.append('profile_pic', input.files[0]);
+
+                fetch('upload_profile_pic.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('profileImage').src = data.image_url;
+                        // Update all profile images on the page
+                        const profileImages = document.querySelectorAll('.post-header img');
+                        profileImages.forEach(img => {
+                            img.src = data.image_url;
+                        });
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while uploading the image');
+                });
+            }
+        }
     </script>
 </body>
 </html> 
