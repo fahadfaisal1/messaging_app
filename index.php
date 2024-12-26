@@ -7,7 +7,10 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$sql = "SELECT posts.*, users.username, 
+$sql = "SELECT 
+        posts.*, 
+        users.username, 
+        users.profile_pic,
         (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) as likes_count,
         (SELECT COUNT(*) > 0 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = {$_SESSION['user_id']}) as user_liked
         FROM posts 
@@ -67,9 +70,14 @@ $result = mysqli_query($con, $sql);
                     <div class="post">
                         <div class="post-header">
                             <?php 
-                            $profile_pic = !empty($post['profile_pic']) ? 'uploads/profile/' . $post['profile_pic'] : 'uploads/profile/default.jpg';
+                            // Debug line to see what's coming from database
+                            // var_dump($post['profile_pic']);
+                            
+                            $profile_pic = !empty($post['profile_pic']) 
+                                ? 'uploads/profile/' . htmlspecialchars($post['profile_pic'])
+                                : 'assets/images/default-avatar.jpg';
                             ?>
-                            <img src="<?php echo $profile_pic; ?>" alt="Profile Picture">
+                            <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" onerror="this.src='assets/images/default-avatar.jpg'">
                             <div>
                                 <h3><?php echo htmlspecialchars($post['username']); ?></h3>
                                 <small><?php echo date('F j, Y g:i a', strtotime($post['created_at'])); ?></small>

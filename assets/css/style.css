@@ -437,4 +437,33 @@ p, h1, h2, h3, h4, h5, h6, span, input, textarea {
 
 .post .post-actions button:hover {
     background: transparent;
+}
+
+.post .post-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+}
+
+.post .post-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.post .post-header div {
+    display: flex;
+    flex-direction: column;
+}
+
+.post .post-header h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.post .post-header small {
+    color: var(--text-secondary);
+    font-size: 12px;
 } 
