@@ -7,6 +7,13 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Mark all notifications as read when page is opened
+$mark_read_sql = "UPDATE notifications 
+                  SET is_read = 1 
+                  WHERE user_id = {$_SESSION['user_id']} 
+                  AND is_read = 0";
+mysqli_query($con, $mark_read_sql);
+
 // Get notifications
 $sql = "SELECT n.*, u.username, u.profile_pic 
         FROM notifications n 
@@ -29,6 +36,15 @@ $result = mysqli_query($con, $sql);
             if (darkMode === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
             }
+        });
+
+        // When page loads, force the notification badge to update
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide all notification badges
+            const badges = document.querySelectorAll('.notification-badge');
+            badges.forEach(badge => {
+                badge.style.display = 'none';
+            });
         });
     </script>
 </head>

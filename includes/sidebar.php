@@ -31,11 +31,20 @@ $unread_count = mysqli_fetch_assoc($notif_result)['count'];
             <i class="fas fa-gamepad"></i>
             <span>Games</span>
         </a>
-        <a href="<?php echo $baseUrl; ?>notifications.php">
+        <a href="<?php echo $baseUrl; ?>notifications.php" class="notification-link">
             <i class="fas fa-bell"></i>
             <span>Notifications</span>
-            <?php if($unread_count > 0): ?>
-                <span class="notification-badge"><?php echo $unread_count; ?></span>
+            <?php
+            // Get unread notifications count
+            $notif_sql = "SELECT COUNT(*) as count FROM notifications 
+                         WHERE user_id = {$_SESSION['user_id']} 
+                         AND is_read = 0";
+            $notif_result = mysqli_query($con, $notif_sql);
+            $notif_count = mysqli_fetch_assoc($notif_result)['count'];
+            
+            if($notif_count > 0): 
+            ?>
+                <span class="notification-badge"><?php echo $notif_count; ?></span>
             <?php endif; ?>
         </a>
         <a href="<?php echo $baseUrl; ?>settings.php">
@@ -49,3 +58,43 @@ $unread_count = mysqli_fetch_assoc($notif_result)['count'];
       
     </div>
 </div> 
+
+<style>
+    .notification-link {
+        position: relative;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        background: #ff4444;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        min-width: 18px;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    /* Dark mode specific styles */
+    [data-theme="dark"] .notification-badge {
+        background: #ff4444;
+        color: white;
+    }
+
+    /* Optional: Add hover effect */
+    .notification-link:hover .notification-badge {
+        opacity: 0.9;
+    }
+</style>
+
+<script>
+    // Prevent default notification behavior if needed
+    document.querySelector('.notification-link').addEventListener('click', function(e) {
+        // You can add custom behavior here if needed
+        // e.preventDefault(); // Uncomment if you want to prevent navigation
+    });
+</script> 
