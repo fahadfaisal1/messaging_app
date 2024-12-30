@@ -1,4 +1,9 @@
 <?php
+// Get current user data
+$user_sql = "SELECT username, email, city FROM users WHERE id = {$_SESSION['user_id']}";
+$user_result = mysqli_query($con, $user_sql);
+$user_data = mysqli_fetch_assoc($user_result);
+
 // Handle form submission
 if(isset($_POST['save_general'])) {
     $username = mysqli_real_escape_string($con, $_POST['username']);
@@ -33,17 +38,18 @@ if(isset($_POST['save_general'])) {
 <form method="POST">
     <div class="form-group">
         <label>Username</label>
-        <input type="text" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+        <input type="text" name="username" value="<?php echo htmlspecialchars($user_data['username']); ?>" required>
     </div>
 
     <div class="form-group">
         <label>Email</label>
-        <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+        <input type="email" name="email" value="<?php echo htmlspecialchars($user_data['email']); ?>" required>
     </div>
 
     <div class="form-group">
         <label>City</label>
-        <input type="text" name="city" value="<?php echo htmlspecialchars($user['city']); ?>">
+        <input type="text" name="city" value="<?php echo htmlspecialchars($user_data['city']); ?>">
+        <small style="color: var(--text-secondary);">Enter your city name (optional)</small>
     </div>
 
     <button type="submit" name="save_general" class="btn-save">Save Changes</button>
