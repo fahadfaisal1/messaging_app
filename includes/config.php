@@ -5,4 +5,7 @@ $con = mysqli_connect("localhost","root","","social_media_db");
 if (mysqli_connect_errno()) {
     die("Connection failed: " . mysqli_connect_error());
 }
+
+// Check if friends table exists, if not create it
+
 ?>
