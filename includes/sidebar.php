@@ -27,6 +27,10 @@ $unread_count = mysqli_fetch_assoc($notif_result)['count'];
             <i class="fas fa-users"></i>
             <span>Friends</span>
         </a>
+        <a href="<?php echo $baseUrl; ?>games.php">
+            <i class="fas fa-gamepad"></i>
+            <span>Games</span>
+        </a>
         <a href="<?php echo $baseUrl; ?>notifications.php">
             <i class="fas fa-bell"></i>
             <span>Notifications</span>
@@ -42,5 +46,6 @@ $unread_count = mysqli_fetch_assoc($notif_result)['count'];
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>
+      
     </div>
 </div> 
