@@ -17,7 +17,14 @@ if(isset($_POST['save_general'])) {
               WHERE id={$_SESSION['user_id']}";
     
     if(mysqli_query($con, $query)) {
+        // Update session data
         $_SESSION['username'] = $username;
+        
+        // Update user_data array for immediate display
+        $user_data['username'] = $username;
+        $user_data['email'] = $email;
+        $user_data['city'] = $city;
+        
         $success_msg = "General settings updated successfully!";
     } else {
         $error_msg = "Error updating settings: " . mysqli_error($con);
@@ -53,4 +60,46 @@ if(isset($_POST['save_general'])) {
     </div>
 
     <button type="submit" name="save_general" class="btn-save">Save Changes</button>
-</form> 
+</form>
+
+<script>
+    // Auto-hide alerts after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                
+                // Remove the element after fade out
+                setTimeout(() => {
+                    alert.remove();
+                }, 500);
+            }, 3000);
+        });
+    });
+</script>
+
+<style>
+    /* ... existing styles ... */
+    .alert {
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+    }
+
+    .alert.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+</style> 
