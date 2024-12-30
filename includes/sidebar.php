@@ -3,7 +3,8 @@
 $isInSubfolder = strpos($_SERVER['PHP_SELF'], '/chat/') !== false;
 $baseUrl = $isInSubfolder ? '../' : '';
 
-$notif_sql = "SELECT COUNT(*) as count FROM notifications WHERE user_id = {$_SESSION['user_id']} AND is_read = 0";
+$notif_sql = "SELECT COUNT(*) as count FROM notifications WHERE user_id = {$_SESSION['user_id']} 
+AND is_read = 0";
 $notif_result = mysqli_query($con, $notif_sql);
 $unread_count = mysqli_fetch_assoc($notif_result)['count'];
 ?>
