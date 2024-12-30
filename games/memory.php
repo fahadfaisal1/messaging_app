@@ -40,8 +40,6 @@
             gameBoard.appendChild(card);
         });
     }
-
-    // ... (rest of the memory game functions from previous code)
     
     // Start game when page loads
     createBoard();
