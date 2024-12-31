@@ -31,7 +31,7 @@ $posts_result = mysqli_query($con, $posts_sql);
   <link rel="stylesheet" href="assets/css/profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .post-image img {
+    .post-image img {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
@@ -46,6 +46,8 @@ $posts_result = mysqli_query($con, $posts_sql);
     position: absolute;
     bottom: 10px;
     right: 10px;
+    display: flex; /* Use flexbox to align items in a row */
+    gap: 10px; /* Space between the buttons */
 }
 
 .edit-cover, .remove-cover {
@@ -55,6 +57,7 @@ $posts_result = mysqli_query($con, $posts_sql);
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    display: inline-block; /* Ensure buttons are inline */
 }
 
 .edit-cover:hover, .remove-cover:hover {
@@ -82,8 +85,7 @@ $posts_result = mysqli_query($con, $posts_sql);
         <?php include 'includes/sidebar.php'; ?>
 
         <div class="main-content">
-            <div class="profile-container">
-                <!-- Cover Photo Section -->
+            <div class="profile-container" >
                 <!-- Cover Photo Section -->
                 <div class="cover-photo">
                     <?php 
@@ -91,18 +93,21 @@ $posts_result = mysqli_query($con, $posts_sql);
                     ?>
                     <img src="<?php echo $cover_pic; ?>" alt="Cover Photo" id="coverImage">
                     <div class="cover-actions">
-                        <button class="edit-cover" onclick="document.getElementById('coverPicInput').click();">
-                            <i class="fas fa-camera"></i> Edit Cover Photo
-                        </button>
-                        <?php if (!empty($user['cover_pic'])): ?>
-                            <button class="remove-cover" onclick="removeCoverPic()">
-                                <i class="fas fa-trash"></i> Remove Cover Photo
-                            </button>
-                        <?php endif; ?>
-                    </div>
+               <button class="edit-cover"  
+                       onclick="document.getElementById('coverPicInput').click();" 
+                       style="background-color: #add8e6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
+                   <i class="fas fa-camera"></i> Edit Cover Photo
+               </button>
+    <?php if (!empty($user['cover_pic'])): ?>
+        <button class="remove-cover" 
+                onclick="removeCoverPic()" 
+                style="background-color: #add8e6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
+            <i class="fas fa-trash"></i> Remove Cover Photo
+        </button>
+    <?php endif; ?>
+</div>
                     <input type="file" id="coverPicInput" style="display: none;" accept="image/*" onchange="uploadCoverPic(this)">
                 </div>
-
 
 
                 <!-- Profile Info Section -->
