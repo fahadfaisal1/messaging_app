@@ -14,11 +14,12 @@ $result = mysqli_query($con, $sql);
 $user = mysqli_fetch_assoc($result);
 
 // Get user's posts
-$posts_sql = "SELECT posts.*, users.username 
+$posts_sql = "SELECT posts.*, users.username, users.profile_pic
               FROM posts 
               JOIN users ON posts.user_id = users.id 
               WHERE posts.user_id = $user_id 
               ORDER BY posts.created_at DESC";
+$posts_result = mysqli_query($con, $posts_sql);
 $posts_result = mysqli_query($con, $posts_sql);
 ?>
 
@@ -27,8 +28,17 @@ $posts_result = mysqli_query($con, $posts_sql);
 <head>
     <title>Profile - <?php echo $user['username']; ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/profile.css">
+  <link rel="stylesheet" href="assets/css/profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .post-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+  
+    </style>
 </head>
 <body>
     <div class="header">
@@ -116,20 +126,29 @@ $posts_result = mysqli_query($con, $posts_sql);
                     </form>
 
                     <!-- Posts Display -->
+                    <!-- Posts Display -->
                     <div class="posts">
                         <?php if(mysqli_num_rows($posts_result) > 0): ?>
                             <?php while($post = mysqli_fetch_assoc($posts_result)) { ?>
                                 <div class="post">
                                     <div class="post-header">
-                                        <img src="assets/images/default-avatar.jpg" alt="Profile Picture">
+                                        <?php 
+                                        $post_profile_pic = !empty($post['profile_pic']) ? 'uploads/profile/' . $post['profile_pic'] : 'assets/images/default-avatar.jpg';
+                                        ?>
+                                        <img src="<?php echo $post_profile_pic; ?>" alt="Profile Picture">
                                         <div>
                                             <h3><?php echo htmlspecialchars($post['username']); ?></h3>
                                             <small><?php echo date('F j, Y g:i a', strtotime($post['created_at'])); ?></small>
                                         </div>
                                     </div>
-                                    <p class="post-content"><?php echo htmlspecialchars($post['content']); ?></p>
+                                    <p class="post-content"><?php echo nl2br(htmlspecialchars($post['content'])); ?></p>
+                                    <?php if(!empty($post['image'])): ?>
+                                        <div class="post-image">
+                                            <img src="uploads/posts/<?php echo htmlspecialchars($post['image']); ?>" alt="Post Image">
+                                        </div>
+                                    <?php endif; ?>
                                     <div class="post-actions">
-                                        <button>
+                                        <button onclick="likePost(<?php echo $post['id']; ?>)">
                                             <i class="far fa-thumbs-up"></i> Like
                                         </button>
                                         <button>
@@ -146,6 +165,8 @@ $posts_result = mysqli_query($con, $posts_sql);
                                 <p>No posts yet. Create your first post!</p>
                             </div>
                         <?php endif; ?>
+                    </div>
+
                     </div>
                 </div>
             </div>
@@ -223,6 +244,27 @@ $posts_result = mysqli_query($con, $posts_sql);
                 });
             }
         }
+function likePost(postId) {
+    fetch('like_post.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'post_id=' + postId
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the like count or change the button appearance
+            console.log('Post liked successfully');
+        } else {
+            console.error('Failed to like post:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
     </script>
 </body>
 </html> 
