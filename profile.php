@@ -38,6 +38,28 @@ $posts_result = mysqli_query($con, $posts_sql);
     margin-top: 10px;
 }
   
+.cover-photo {
+    position: relative;
+}
+
+.cover-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.edit-cover, .remove-cover {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-cover:hover, .remove-cover:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
     </style>
 </head>
 <body>
@@ -62,12 +84,26 @@ $posts_result = mysqli_query($con, $posts_sql);
         <div class="main-content">
             <div class="profile-container">
                 <!-- Cover Photo Section -->
+                <!-- Cover Photo Section -->
                 <div class="cover-photo">
-                    <img src="assets/images/default-cover.jpg" alt="Cover Photo">
-                    <button class="edit-cover">
-                        <i class="fas fa-camera"></i> Edit Cover Photo
-                    </button>
+                    <?php 
+                    $cover_pic = !empty($user['cover_pic']) ? 'uploads/cover/' . $user['cover_pic'] : 'assets/images/default-cover.jpg';
+                    ?>
+                    <img src="<?php echo $cover_pic; ?>" alt="Cover Photo" id="coverImage">
+                    <div class="cover-actions">
+                        <button class="edit-cover" onclick="document.getElementById('coverPicInput').click();">
+                            <i class="fas fa-camera"></i> Edit Cover Photo
+                        </button>
+                        <?php if (!empty($user['cover_pic'])): ?>
+                            <button class="remove-cover" onclick="removeCoverPic()">
+                                <i class="fas fa-trash"></i> Remove Cover Photo
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                    <input type="file" id="coverPicInput" style="display: none;" accept="image/*" onchange="uploadCoverPic(this)">
                 </div>
+
+
 
                 <!-- Profile Info Section -->
                 <div class="profile-info">
@@ -244,6 +280,30 @@ $posts_result = mysqli_query($con, $posts_sql);
                 });
             }
         }
+function uploadCoverPic(input) {
+    if (input.files && input.files[0]) {
+        const formData = new FormData();
+        formData.append('cover_pic', input.files[0]);
+
+        fetch('upload_cover_pic.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('coverImage').src = data.image_url;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while uploading the image');
+        });
+    }
+}
+
 function likePost(postId) {
     fetch('like_post.php', {
         method: 'POST',
@@ -265,6 +325,32 @@ function likePost(postId) {
         console.error('Error:', error);
     });
 }
+function removeCoverPic() {
+    if (confirm('Are you sure you want to remove your cover photo?')) {
+        fetch('upload_cover_pic.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=remove'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('coverImage').src = data.default_image;
+                // Remove the "Remove Cover Photo" button
+                document.querySelector('.remove-cover').remove();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while removing the cover photo');
+        });
+    }
+}
     </script>
+
 </body>
 </html> 
