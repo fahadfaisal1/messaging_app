@@ -280,7 +280,7 @@ $posts_result = mysqli_query($con, $posts_sql);
                 });
             }
         }
-function uploadCoverPic(input) {
+        function uploadCoverPic(input) {
     if (input.files && input.files[0]) {
         const formData = new FormData();
         formData.append('cover_pic', input.files[0]);
@@ -292,7 +292,20 @@ function uploadCoverPic(input) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                // Update cover photo image
                 document.getElementById('coverImage').src = data.image_url;
+
+                // Show the "Remove Cover Photo" button
+                const removeButton = document.querySelector('.remove-cover');
+                if (!removeButton) {
+                    const coverActions = document.querySelector('.cover-actions');
+                    const removeButtonHTML = `
+                        <button class="remove-cover" onclick="removeCoverPic()">
+                            <i class="fas fa-trash"></i> Remove Cover Photo
+                        </button>
+                    `;
+                    coverActions.innerHTML += removeButtonHTML;  // Re-append the remove button
+                }
             } else {
                 alert(data.message);
             }
@@ -303,6 +316,7 @@ function uploadCoverPic(input) {
         });
     }
 }
+
 
 function likePost(postId) {
     fetch('like_post.php', {
@@ -337,9 +351,14 @@ function removeCoverPic() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                // Change the cover photo to the default image
                 document.getElementById('coverImage').src = data.default_image;
-                // Remove the "Remove Cover Photo" button
-                document.querySelector('.remove-cover').remove();
+
+                // Remove the "Remove Cover Photo" button (optional)
+                const removeButton = document.querySelector('.remove-cover');
+                if (removeButton) {
+                    removeButton.remove();
+                }
             } else {
                 alert(data.message);
             }
@@ -350,6 +369,7 @@ function removeCoverPic() {
         });
     }
 }
+
     </script>
 
 </body>
